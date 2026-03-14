@@ -1,58 +1,57 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.3'
-    id 'io.spring.dependency-management' version '1.1.7'
-    id 'com.google.protobuf' version '0.9.5'
+    id 'org.springframework.boot' version '3.4.0'
+    id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
-description = 'gRPC'
-
-java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-    }
-}
 
 repositories {
     mavenCentral()
 }
 
-ext {
-    set('springGrpcVersion', "1.0.2")
-}
-
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-    implementation 'io.grpc:grpc-services'
-    implementation 'org.springframework.grpc:spring-grpc-client-spring-boot-starter'
-    implementation 'org.springframework.grpc:spring-grpc-server-web-spring-boot-starter'
-    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-    testImplementation 'org.springframework.grpc:spring-grpc-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-}
+    implementation 'org.springframework.boot:spring-boot-starter'
 
-dependencyManagement {
-    imports {
-        mavenBom "org.springframework.grpc:spring-grpc-dependencies:${springGrpcVersion}"
-    }
+    // gRPC Starters
+    implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
+    implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
+
+    // Аннотации и Jakarta
+    compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+
+    // Тесты
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.grpc:grpc-testing:1.69.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc'
+        artifact = "com.google.protobuf:protoc:3.25.5"
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java'
+            artifact = "io.grpc:protoc-gen-grpc-java:1.69.0"
         }
     }
     generateProtoTasks {
         all()*.plugins {
             grpc {
-                option '@generated=omit'
+                option 'jakarta_omit'
             }
+        }
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
         }
     }
 }

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.example.grpc";
+option java_multiple_files = true;
+
+service QuotaService{
+  rpc CheckAccess (AccessRequest) returns (AccessResponse);
+}
+
+message AccessRequest{
+  string user_id = 1;
+}
+
+message AccessResponse{
+  bool allowed = 1;
+}
