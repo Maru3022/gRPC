@@ -4,15 +4,15 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 @GrpcService
-public class QuotaServiceImpl extends QuotaServiceGrpc.QuotaServiceImplBase{
+public class QuotaServiceImpl extends QuotaServiceGrpc.QuotaServiceImplBase {
 
     @Override
-    public void checkAccess(AccessRequest request, StreamObserver<AccessResponse> responseStreamObserver){
+    public void checkAccess(AccessRequest request, StreamObserver<AccessResponse> responseObserver) {
         AccessResponse response = AccessResponse.newBuilder()
                 .setAllowed(true)
                 .build();
 
-        responseStreamObserver.onNext(response);
-        responseStreamObserver.onCompleted();
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
     }
 }

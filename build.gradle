@@ -7,6 +7,9 @@ plugins {
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
 
 repositories {
     mavenCentral()
@@ -15,17 +18,19 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
 
-    // gRPC Starters
     implementation 'net.devh:grpc-server-spring-boot-starter:3.1.0.RELEASE'
     implementation 'net.devh:grpc-client-spring-boot-starter:3.1.0.RELEASE'
 
-    // Аннотации и Jakarta
+    implementation 'io.grpc:grpc-protobuf:1.69.0'
+    implementation 'io.grpc:grpc-stub:1.69.0'
+    implementation 'com.google.protobuf:protobuf-java:3.25.5'
+
     compileOnly 'javax.annotation:javax.annotation-api:1.3.2'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
 
-    // Тесты
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'io.grpc:grpc-testing:1.69.0'
+    testImplementation 'io.grpc:grpc-inprocess:1.69.0'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
@@ -40,9 +45,7 @@ protobuf {
     }
     generateProtoTasks {
         all()*.plugins {
-            grpc {
-                option 'jakarta_omit'
-            }
+            grpc {}
         }
     }
 }
